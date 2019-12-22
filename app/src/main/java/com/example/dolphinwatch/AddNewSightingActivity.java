@@ -65,6 +65,7 @@ public class AddNewSightingActivity extends AppCompatActivity {
 
                     WatchingActivity.sightings.add(sf);
                     Toast.makeText(getApplicationContext(), "Saved succesfully", Toast.LENGTH_SHORT).show();
+                    AddNewSightingActivity.this.finish();
                 }
             }
         });

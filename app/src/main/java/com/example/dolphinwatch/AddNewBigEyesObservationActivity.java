@@ -63,6 +63,7 @@ public class AddNewBigEyesObservationActivity extends AppCompatActivity {
                     WatchingActivity.bigEyesObservations.add(bef);
 
                     Toast.makeText(getApplicationContext(), "Observation finished", Toast.LENGTH_SHORT).show();
+                    AddNewBigEyesObservationActivity.this.finish();
                 }
             }
         });
