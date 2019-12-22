@@ -59,6 +59,7 @@ public class EndWatchingActivity extends AppCompatActivity {
             public void onClick(View v) {
                 finish();
                 moveTaskToBack(true);
+                System.exit(0);
             }
         });
 
