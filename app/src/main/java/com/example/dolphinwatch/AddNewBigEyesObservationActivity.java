@@ -1,7 +1,10 @@
 package com.example.dolphinwatch;
 
+import android.annotation.SuppressLint;
+import android.location.Location;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -10,14 +13,23 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.location.ActivityRecognition;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnSuccessListener;
+
 import java.time.LocalTime;
+
+import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 
 public class AddNewBigEyesObservationActivity extends AppCompatActivity {
     TextView timeStartedTextView;
-    Button endObservationButton;
+    Button endObservationButton, getLocationButton;
     EditText place, observingArea, equipment, seaState, vessel, trawler, sightingLocationDescription, distanceEst, notes, visibility;
     BigEyesForm bef;
+    private FusedLocationProviderClient fusedLocationClient;
 
+    @SuppressLint("MissingPermission")
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +39,7 @@ public class AddNewBigEyesObservationActivity extends AppCompatActivity {
         LocalTime timeStarted = LocalTime.now();
         timeStartedTextView.setText(String.format("%02d:%02d", timeStarted.getHour(), timeStarted.getMinute()));
         endObservationButton = findViewById(R.id.endBigEyesObservationButton);
+        getLocationButton = findViewById(R.id.getLocation);
 
         bef = new BigEyesForm(timeStarted);
 
@@ -40,6 +53,16 @@ public class AddNewBigEyesObservationActivity extends AppCompatActivity {
         distanceEst = findViewById(R.id.distanceEstEditText);
         notes = findViewById(R.id.notesEditText);
         visibility = findViewById(R.id.visibilityEditText);
+
+        requestPermission();
+
+        getLocationButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setLocation();
+            }
+        });
+
 
         endObservationButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -67,5 +90,27 @@ public class AddNewBigEyesObservationActivity extends AppCompatActivity {
                 }
             }
         });
+
+    }
+    @SuppressLint("MissingPermission")
+    public void setLocation() {
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+        if(place == null)
+            place = findViewById(R.id.placeEditText);
+        fusedLocationClient.getLastLocation()
+            .addOnSuccessListener(this, new OnSuccessListener<Location>() {
+                @Override
+                public void onSuccess(Location location) {
+                    // Got last known location. In some rare situations this can be null.
+                    if (location != null) {
+                        // Logic to handle location object
+                        place.setText(location.toString());
+                    }
+                }
+            });
+    }
+
+    private void requestPermission() {
+        ActivityCompat.requestPermissions(this, new String[]{ACCESS_FINE_LOCATION}, 1);
     }
 }
