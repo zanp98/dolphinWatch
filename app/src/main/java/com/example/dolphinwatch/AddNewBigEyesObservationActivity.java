@@ -104,7 +104,7 @@ public class AddNewBigEyesObservationActivity extends AppCompatActivity {
                     // Got last known location. In some rare situations this can be null.
                     if (location != null) {
                         // Logic to handle location object
-                        place.setText(location.toString());
+                        place.setText(location.toString().split(" ")[1]);
                     }
                 }
             });
