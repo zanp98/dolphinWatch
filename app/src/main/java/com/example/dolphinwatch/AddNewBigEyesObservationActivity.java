@@ -1,6 +1,7 @@
 package com.example.dolphinwatch;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.location.Location;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
@@ -13,7 +14,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.location.ActivityRecognition;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -95,19 +95,21 @@ public class AddNewBigEyesObservationActivity extends AppCompatActivity {
     @SuppressLint("MissingPermission")
     public void setLocation() {
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-        if(place == null)
+        if(place == null) {
             place = findViewById(R.id.placeEditText);
-        fusedLocationClient.getLastLocation()
-            .addOnSuccessListener(this, new OnSuccessListener<Location>() {
-                @Override
-                public void onSuccess(Location location) {
-                    // Got last known location. In some rare situations this can be null.
-                    if (location != null) {
-                        // Logic to handle location object
-                        place.setText(location.toString().split(" ")[1]);
-                    }
-                }
-            });
+            fusedLocationClient.getLastLocation()
+                    .addOnSuccessListener(this, new OnSuccessListener<Location>() {
+                        @Override
+                        public void onSuccess(Location location) {
+                            // Got last known location. In some rare situations this can be null.
+                            if (location != null) {
+                                // Logic to handle location object
+                                place.setText(location.toString().split(" ")[1]);
+                            }
+                        }
+                    });
+        }
+
     }
 
     private void requestPermission() {
