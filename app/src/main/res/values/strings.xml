@@ -23,4 +23,11 @@
     <string name="land_sighting">Land Sighting Forms</string>
     <string name="big_eyes">Land Observation - Big Eyes</string>
     <string name="finish">Finish Observation</string>
+    <string name="no_location_detected">
+        No location detected. Make sure location is enabled on the device.
+    </string>
+
+    <string name="permission_rationale">Location permission is needed for core functionality</string>
+    <string name="permission_denied_explanation">Permission was denied, but is needed for core
+        functionality.</string>
 </resources>
