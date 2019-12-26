@@ -1,7 +1,14 @@
 package com.example.dolphinwatch;
 
+import android.Manifest;
+import android.content.Context;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -17,6 +24,7 @@ public class AddNewBigEyesObservationActivity extends AppCompatActivity {
     Button endObservationButton;
     EditText place, observingArea, equipment, seaState, vessel, trawler, sightingLocationDescription, distanceEst, notes, visibility;
     BigEyesForm bef;
+    LocationManager locationManager;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
@@ -40,6 +48,24 @@ public class AddNewBigEyesObservationActivity extends AppCompatActivity {
         distanceEst = findViewById(R.id.distanceEstEditText);
         notes = findViewById(R.id.notesEditText);
         visibility = findViewById(R.id.visibilityEditText);
+
+        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        double longitude = location.getLongitude();
+        double latitutde = location.getLatitude();
+
+        place.setText(String.format("Latitude: %.2f, Longitude: %.2f", latitutde, longitude));
+        place.setEnabled(false);
 
         endObservationButton.setOnClickListener(new View.OnClickListener() {
             @Override
