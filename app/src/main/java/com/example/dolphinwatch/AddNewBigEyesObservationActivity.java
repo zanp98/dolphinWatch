@@ -32,7 +32,7 @@ import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 
 public class AddNewBigEyesObservationActivity extends AppCompatActivity {
     TextView timeStartedTextView;
-    Button endObservationButton, getLocationButton;
+    Button endObservationButton;
     EditText place, observingArea, equipment, seaState, vessel, trawler, sightingLocationDescription, distanceEst, notes, visibility;
     BigEyesForm bef;
     private FusedLocationProviderClient mFusedLocationClient;
@@ -50,7 +50,7 @@ public class AddNewBigEyesObservationActivity extends AppCompatActivity {
         LocalTime timeStarted = LocalTime.now();
         timeStartedTextView.setText(String.format("%02d:%02d", timeStarted.getHour(), timeStarted.getMinute()));
         endObservationButton = findViewById(R.id.endBigEyesObservationButton);
-        getLocationButton = findViewById(R.id.getLocation);
+
 
         bef = new BigEyesForm(timeStarted);
 
@@ -69,12 +69,7 @@ public class AddNewBigEyesObservationActivity extends AppCompatActivity {
             requestPermissions();
         }
 
-        getLocationButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setLocation();
-            }
-        });
+        setLocation();
 
 
         endObservationButton.setOnClickListener(new View.OnClickListener() {
@@ -115,11 +110,7 @@ public class AddNewBigEyesObservationActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<Location> task) {
                         if (task.isSuccessful() && task.getResult() != null) {
                             mLastLocation = task.getResult();
-
-                            place.setText("test location OK");
-                            /*mLongitudeText.setText(String.format(Locale.ENGLISH, "%s: %f",
-                                    mLongitudeLabel,
-                                    mLastLocation.getLongitude()));*/
+                            place.setText(mLastLocation.getLatitude() + " " + mLastLocation.getLongitude() + "");
                         } else {
                             Log.w(TAG, "getLastLocation:exception", task.getException());
                             showSnackbar(getString(R.string.no_location_detected));
